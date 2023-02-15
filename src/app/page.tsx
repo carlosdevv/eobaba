@@ -1,91 +1,100 @@
-import Image from 'next/image'
-import { Inter } from '@next/font/google'
-import styles from './page.module.css'
+'use client'
 
-const inter = Inter({ subsets: ['latin'] })
+import Header from '@/components/Header'
+import MainLayout from '@/components/MainLayout'
+import PlayerCard from '@/components/PlayerCard'
+import { StatusTab } from '@/components/StatusTab'
+import { TabsComponent } from '@/components/Tabs'
+import { useAuth } from '@/hooks/useAuth'
 
-export default function Home() {
+import * as S from './styles'
+
+export default function Dashboard() {
+  const { user } = useAuth()
+
+  // if (!user) {
+  //   return redirect('/login')
+  // }
+
+  const tabsProps = [
+    {
+      valueTab: '1',
+      label: 'Meus Status',
+      active: true,
+      content: <StatusTab />
+    },
+    {
+      valueTab: '2',
+      label: 'Meus Status 2',
+      active: true,
+      content: <StatusTab />
+    }
+  ]
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+    <MainLayout>
+      <S.Container>
+        <Header title="Dashboard" />
+        <S.ContentPage>
+          <S.PlayerResume>
+            <S.NameColumn>
+              <h1>
+                Bem vindo,<p>{user?.name ?? 'Craque'}</p>
+              </h1>
+              <div className="favoriteClub">
+                <div
+                  className="clubPic"
+                  style={{
+                    background: 'var(--gray-500)',
+                    width: '3rem',
+                    height: '3rem',
+                    borderRadius: '50%'
+                  }}
+                />
+                <div
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '0.25rem'
+                  }}
+                >
+                  <span style={{ color: 'var(--primary)' }}>Torcedor do</span>
+                  <span style={{ color: 'var(--white)', fontWeight: '500' }}>
+                    Bahia
+                  </span>
+                </div>
+              </div>
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-        <div className={styles.thirteen}>
-          <Image src="/thirteen.svg" alt="13" width={40} height={31} priority />
-        </div>
-      </div>
+              <button className="seeStatusBtn">Ver Status</button>
+            </S.NameColumn>
 
-      <div className={styles.grid}>
-        <a
-          href="https://beta.nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
+            <PlayerCard />
 
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>Explore the Next.js 13 playground.</p>
-        </a>
+              <S.PlayerStatus>
+                <S.PlayerStatusItem>
+                  <span>Partidas</span>
+                  <h2>50</h2>
+                </S.PlayerStatusItem>
+                <S.PlayerStatusItem>
+                  <span>Idade</span>
+                  <h2>22</h2>
+                </S.PlayerStatusItem>
+                <S.PlayerStatusItem>
+                  <span>Gols</span>
+                  <h2>50</h2>
+                </S.PlayerStatusItem>
+                <S.PlayerStatusItem>
+                  <span>Assists</span>
+                  <h2>50</h2>
+                </S.PlayerStatusItem>
+              </S.PlayerStatus>
+          </S.PlayerResume>
 
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+          <S.TabContainer>
+            <TabsComponent tabsProps={tabsProps} />
+          </S.TabContainer>
+        </S.ContentPage>
+      </S.Container>
+    </MainLayout>
   )
 }

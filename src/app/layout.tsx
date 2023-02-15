@@ -1,18 +1,31 @@
-import './globals.css'
+'use client'
+import { AuthContextProvider } from '@/hooks/useAuth';
+import StyledComponentsRegistry from '@/services/registry';
+import GlobalStyles from '@/styles/global';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { inter, lexend } from './fonts';
+
 
 export default function RootLayout({
-  children,
+  children
 }: {
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      {/*
-        <head /> will contain the components returned by the nearest parent
-        head.tsx. Find out more at https://beta.nextjs.org/docs/api-reference/file-conventions/head
-      */}
-      <head />
-      <body>{children}</body>
-    </html>
+    <>
+      <html lang="en" className={`${inter.variable} ${lexend.variable}`}>
+        <head />
+        <body>
+          <ToastContainer />
+          <AuthContextProvider>
+            <StyledComponentsRegistry>
+              <GlobalStyles />
+              {children}
+            </StyledComponentsRegistry>
+          </AuthContextProvider>
+        </body>
+      </html>
+    </>
   )
 }
